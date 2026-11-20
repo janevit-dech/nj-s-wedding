@@ -1,2 +1,5 @@
 # design reference mockups — not part of the deployed site
 base/
+
+# agent skill for collaborative edits — not part of the deployed site
+.agents/
