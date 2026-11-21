@@ -1,6 +1,6 @@
 ---
 name: wedding-card
-description: Collaborate on edits to the Naneen & JameJame wedding e-card (this repo) — change copy/text, dates, venue, RSVP link, program times, dress code, colors, palette/theme, fonts, decorations, photos, spacing, or mobile/desktop layout. Use whenever the user asks to edit, restyle, retheme, recolor, translate, or fill in placeholders on the card.
+description: Collaborate on edits to the NeenNeen & JameJame wedding e-card (this repo) — change copy/text, dates, venue, RSVP link, program times, dress code, colors, palette/theme, fonts, decorations, photos, spacing, or mobile/desktop layout. Use whenever the user asks to edit, restyle, retheme, recolor, translate, or fill in placeholders on the card.
 ---
 
 # Wedding e-card — collaborative editing
@@ -126,7 +126,7 @@ or `.photo-note` text. To use a real photo, drop files in `images/` and replace 
 
 ```html
 <div class="arch hero-arch">
-  <img src="./images/couple.jpg" alt="Naneen และ JameJame"
+  <img src="./images/couple.jpg" alt="NeenNeen และ JameJame"
        style="width:100%;height:100%;object-fit:cover">
 </div>
 ```

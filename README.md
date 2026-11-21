@@ -1,4 +1,4 @@
-# Naneen & JameJame — Wedding e-card
+# NeenNeen & JameJame — Wedding e-card
 
 การ์ดเชิญงานแต่งงานออนไลน์ (e-card) แบบหน้าเดียว รองรับทั้งมือถือและเดสก์ท็อป
 เป็นเว็บ static ล้วน (HTML + CSS + inline SVG) ไม่มี build step ไม่มี dependency
@@ -48,7 +48,7 @@ Breakpoint เดียวคือ `900px` — ต่ำกว่านั้�
 
 ```html
 <div class="arch hero-arch">
-  <img src="./images/couple.jpg" alt="Naneen และ JameJame"
+  <img src="./images/couple.jpg" alt="NeenNeen และ JameJame"
        style="width:100%;height:100%;object-fit:cover">
 </div>
 ```

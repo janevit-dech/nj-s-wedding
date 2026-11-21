@@ -207,6 +207,18 @@ svg.defs { position: absolute; width: 0; height: 0; }
 .hero-arch { width: 100%; height: 398px; border-radius: 179px 179px 18px 18px; }
 .hero-arch .couple { width: 230px; height: 253px; }
 
+/* real photos inside arch frames */
+.arch-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-photo { object-position: center 75%; }
+.footer-photo { object-position: center 85%; }
+
 /* ---------- love + rsvp ---------- */
 
 .love-grid {
@@ -456,7 +468,7 @@ svg.defs { position: absolute; width: 0; height: 0; }
   opacity: 0.55;
   color: #FFFFFF;
 }
-.toast .glasses {
+.toast .envelope {
   position: absolute;
   left: 50%;
   top: 0;
@@ -464,6 +476,7 @@ svg.defs { position: absolute; width: 0; height: 0; }
   width: 84px;
   height: 62px;
   fill: none;
+  color: var(--rose);
   stroke: var(--rose);
   stroke-width: 1.6;
   stroke-linecap: round;
@@ -477,36 +490,24 @@ svg.defs { position: absolute; width: 0; height: 0; }
   line-height: 1.5;
   color: var(--ink);
 }
-.footer-thai { font-size: 15px; }
+.footer-head .smiley {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.22em;
+  margin-left: 4px;
+  fill: #FFFFFF;
+  stroke: var(--rose);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .photo-frame { position: relative; width: 310px; height: 390px; flex-shrink: 0; }
 .photo-frame .zigzag { position: absolute; left: 0; top: 0; width: 310px; height: 390px; }
 .photo-frame .inner { position: absolute; left: 22px; top: 22px; }
 .photo-frame .inner .arch { width: 266px; height: 346px; border-radius: 10px; outline: none; }
 
-.logo {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8px;
-  color: var(--rose);
-  margin-top: 6px;
-}
-.logo .lucky { font-weight: 600; font-size: 17px; letter-spacing: 3px; }
-.logo .love { font-family: 'Pacifico', cursive; font-size: 30px; line-height: 1; }
-.logo .heart {
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  align-self: center;
-  fill: none;
-  stroke: var(--rose);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.footer-names { font-weight: 600; font-size: 16px; letter-spacing: 3px; color: var(--rose); }
+.footer-thai { font-size: 15px; }
 
 /* footer wave: previous band is white on mobile, mist on desktop */
 .footer > .wave .fill { fill: #FFFFFF; }
@@ -623,16 +624,12 @@ svg.defs { position: absolute; width: 0; height: 0; }
     grid-template-areas:
       "photo toast"
       "photo head"
-      "photo thai"
-      "photo logo"
-      "photo names";
+      "photo thai";
   }
   .footer-grid .toast { grid-area: toast; }
   .footer-grid .footer-head { grid-area: head; }
-  .footer-grid .footer-thai { grid-area: thai; }
   .footer-grid .photo-frame { grid-area: photo; }
-  .footer-grid .logo { grid-area: logo; }
-  .footer-grid .footer-names { grid-area: names; }
+  .footer-grid .footer-thai { grid-area: thai; }
 }
 
 /* ---------- typography resets ---------- */
