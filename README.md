@@ -7,7 +7,8 @@ deploy ขึ้น Vercel ได้ทันที
 ## โครงสร้างไฟล์
 
 ```
-index.html     หน้าเว็บทั้งหมด (เนื้อหา + SVG symbols ของลายประดับ)
+index.html     หน้าการ์ดเชิญ (เนื้อหา + SVG symbols ของลายประดับ)
+rsvp.html      หน้าแบบฟอร์มตอบรับคำเชิญ — ส่งคำตอบเข้า Google Sheet ผ่าน Apps Script
 styles.css     ตัวแปรสี/ตัวอักษร, layout มือถือ (default) และเดสก์ท็อป (@media min-width:900px)
 base/          ไฟล์ดีไซน์อ้างอิงจาก design tool — ไม่ได้ถูกใช้ตอน runtime
   mobile/DesignG3.dc.html
@@ -31,15 +32,16 @@ Breakpoint เดียวคือ `900px` — ต่ำกว่านั้�
 
 ## ข้อมูลที่ต้องแก้ก่อนส่งการ์ดจริง
 
-ค่าที่ยังเป็น placeholder อยู่ในวงเล็บเหลี่ยม `[...]` ทั้งหมดอยู่ใน `index.html`:
+ข้อมูลจริงที่ใส่แล้ว: วันที่ (3 เม.ย. 2570), สถานที่ The Barn at The Upper Ground (จตุจักร)
+พร้อมลิงก์ Google Maps 2 จุด, กำหนดการ (กินเลี้ยงฉลอง 10:30 - 13:30),
+กำหนดตอบรับ 31 ม.ค. 2570, ชื่อเล่นท้ายการ์ด N & J
 
-- `[DD] . [MM] . [YY]` และ `[วันเสาร์ที่ DD เดือน พ.ศ. YYYY]` — วันที่จัดงาน
-- `รบกวนตอบรับภายในวันที่ [DD เดือน YYYY]` — กำหนดตอบรับ
-- ปุ่ม **ยืนยันการเข้าร่วม · Confirm** — `href="#"` เปลี่ยนเป็นลิงก์ Google Form / LINE
-- `[VENUE NAME]`, `[ชื่อสถานที่ · ห้อง / ชั้น]`, `[ที่อยู่ ถนน เขต จังหวัด]`, `[ข้อมูลที่จอดรถ ...]`
-- ลิงก์ Google Maps 2 จุด — แทน `query=VENUE+NAME+Bangkok` ด้วยชื่อสถานที่จริง
-- เวลาในตาราง Program `[09:00]`–`[12:00]`
-- `[A] & [B]` ท้ายหน้า — ชื่อเล่นบ่าวสาว
+ส่วนที่ตัดออกชั่วคราว (เอากลับมาได้ภายหลัง): รูปสถานที่และข้อมูลที่จอดรถในส่วน Venue
+(CSS ของ `.venue-photo-link` / `.venue-arch` / `.parking` ยังอยู่ครบ แค่ลบ markup ออก)
+
+ค่าที่ยังเป็น placeholder:
+
+- `rsvp.html` — `SCRIPT_URL` (`[GOOGLE_SCRIPT_URL]`) ใน `<script>` ท้ายไฟล์
 
 ### ใส่รูปจริงแทนกล่อง placeholder
 
@@ -54,6 +56,36 @@ Breakpoint เดียวคือ `900px` — ต่ำกว่านั้�
 ```
 
 `.arch` ตั้ง `overflow:hidden` ไว้แล้ว รูปจะถูกครอบตามทรงโค้งของการ์ดอัตโนมัติ
+
+## การเชื่อม RSVP กับ Google Sheet
+
+หน้า `rsvp.html` มีฟอร์ม 4 ข้อ (ชื่อ-นามสกุล, เข้าร่วมได้หรือไม่, จำนวนผู้เข้าร่วม, ข้อความ)
+เมื่อกดส่ง ฟอร์มจะ POST ไปที่ Google Apps Script Web App ซึ่งเขียนแถวใหม่ลง Google Sheet
+
+### ขั้นตอนตั้งค่า (ทำครั้งเดียว)
+
+1. สร้าง Google Sheet ใหม่ ตั้งหัวตาราง row แรก: `เวลา | ชื่อ | เข้าร่วม | จำนวน | ข้อความ`
+2. ใน Sheet เปิด **Extensions → Apps Script** แล้ววางโค้ดนี้แทนของเดิม:
+
+   ```js
+   function doPost(e) {
+     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+     var p = e.parameter;
+     sheet.appendRow([new Date(), p.name, p.attending, p.guests || "", p.message || ""]);
+     return ContentService.createTextOutput("ok");
+   }
+   ```
+
+3. กด **Deploy → New deployment → Web app** ตั้งค่า:
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+4. คัดลอก **Web app URL** (ลงท้าย `/exec`) มาแทน `[GOOGLE_SCRIPT_URL]`
+   ในตัวแปร `SCRIPT_URL` ท้ายไฟล์ `rsvp.html`
+5. ทดสอบส่งฟอร์ม 1 ครั้ง แล้วเช็กว่ามีแถวใหม่ขึ้นใน Sheet
+
+หมายเหตุ: ฟอร์มส่งแบบ `no-cors` จึงอ่านคำตอบจากเซิร์ฟเวอร์ไม่ได้ —
+ถ้า fetch สำเร็จจะถือว่าส่งแล้วและโชว์หน้า Thank you ทันที
+ถ้าแก้โค้ด Apps Script ภายหลัง ต้อง Deploy → **Manage deployments → Edit → New version** URL เดิมถึงจะอัปเดต
 
 ## รันดูในเครื่อง
 
